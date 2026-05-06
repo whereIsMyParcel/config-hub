@@ -5,6 +5,10 @@ management:
         include:
           - health
           - refresh
+  endpoint:
+    health:
+      show-details: always
+      
 
 logging:
   level:
