@@ -5,8 +5,14 @@ spring:
   security:
     oauth2:
       resourceserver:
-        jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/sparta-logistics}
+        spring:
+          security:
+            oauth2:
+              resourceserver:
+                jwt:
+                  # issuer-uri 대신 jwk-set-uri 사용
+                  # → 서명 검증만 하고 iss 클레임 검증은 하지 않음
+                  jwk-set-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/sparta-logistics}/protocol/openid-connect/certs
   cloud:
     gateway:
       routes:
