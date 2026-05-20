@@ -1,46 +1,39 @@
-server:
-  port: 8000
-
 spring:
   security:
     oauth2:
       resourceserver:
-        spring:
-          security:
-            oauth2:
-              resourceserver:
-                jwt:
-                  # issuer-uri 대신 jwk-set-uri 사용
-                  # → 서명 검증만 하고 iss 클레임 검증은 하지 않음
-                  jwk-set-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/sparta-logistics}/protocol/openid-connect/certs
+        jwt:
+          jwk-set-uri: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/certs
   cloud:
     gateway:
-      routes:
-        - id: user-service-auth
-          uri: lb://user-service
-          predicates:
-            - Path=/api/v1/auth/**
-        - id: user-service-users
-          uri: lb://user-service
-          predicates:
-            - Path=/api/v1/users/**
-        - id: hub-service
-          uri: lb://hub-service
-          predicates:
-            - Path=/api/v1/hubs/**
-        - id: company-service
-          uri: lb://company-service
-          predicates:
-            - Path=/api/v1/companies/**, /api/v1/products/**
-        - id: order-service
-          uri: lb://order-service
-          predicates:
-            - Path=/api/v1/orders/**
-        - id: shipment-service
-          uri: lb://shipment-service
-          predicates:
-            - Path=/api/v1/shipments/**
-        - id: ai-slack-service
-          uri: lb://ai-slack-service
-          predicates:
-            - Path=/api/v1/ai/**
+      server:
+        webflux:
+          routes:
+            - id: user-service-auth
+              uri: lb://user-service
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: user-service-users
+              uri: lb://user-service
+              predicates:
+                - Path=/api/v1/users/**
+            - id: hub-service
+              uri: lb://hub-service
+              predicates:
+                - Path=/api/v1/hubs/**
+            - id: company-service
+              uri: lb://company-service
+              predicates:
+                - Path=/api/v1/companies/**,/api/v1/products/**
+            - id: order-service
+              uri: lb://order-service
+              predicates:
+                - Path=/api/v1/orders/**
+            - id: shipment-service
+              uri: lb://shipment-service
+              predicates:
+                - Path=/api/v1/shipments/**
+            - id: ai-slack-service
+              uri: lb://ai-slack-service
+              predicates:
+                - Path=/api/v1/ai/**
