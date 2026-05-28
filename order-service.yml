@@ -2,6 +2,10 @@ server:
   port: 8084
 
 spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
   datasource:
     url: ${ORDER_DB_URL:jdbc:postgresql://localhost:5432/sparta_logistics?currentSchema=order_db}
     username: ${DB_USERNAME:sparta}
